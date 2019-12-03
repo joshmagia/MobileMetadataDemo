@@ -28,8 +28,9 @@ const captureButton = document.getElementById('capture');
 
 
 const constraints = {
-    video: true,
-    };
+    video: { facingMode: "environment" },
+    audio: false
+};
 
 // fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
 
