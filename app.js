@@ -1,186 +1,317 @@
-// var constraints = { video: { facingMode: "user" }, audio: false };
+/* Start of main code */
+var exifObj;
 
-// const cameraView = document.querySelector("#camera--view"),
-// cameraTrigger = document.querySelector("#camera--trigger"),
+var file;
 
-function cameraStart() {
-    navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(function(stream) {
-        track = stream.getTracks()[0];
-        cameraView.srcObject = stream;
-    })
-    .catch(function(error) {
-        // console.error("Oops. Something is broken.", error);
-        console.error("Oops. Something is broken.", error);
-    });
-}
+// Draws the metadata into a new image.
+// function handleFileSelect(evt) {
+//     var f = evt.target.files[0]; // FileList object
+//     var reader = new FileReader();
+//     reader.onloadend = function(e) {
+//         var image = new Image();
+//         image.src = e.target.result;
+//         image.onload = function() {
+//             var canvas = document.getElementById("canvas");
+//             var ctx = canvas.getContext("2d");
+//             ctx.drawImage(image, 0, 0, 200, 100);                
+//         };
+//     };
+//     reader.readAsDataURL(f);
+// }
 
-const fileInput = document.getElementById('file-input');
+function printOriginalFileSelect(evt) {
+    // Parameter = File array
 
-const output = document.getElementById('output');
-
-const player = document.getElementById('player');
-
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const captureButton = document.getElementById('capture');
-
-
-const constraints = {
-    video: { facingMode: "environment" },
-    audio: false
-};
-
-// fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
-
-function doSomethingWithFiles(fileList) {
-    console.log("test");
-    let file = null;
-
-    for (let i = 0; i < fileList.length; i++) {
-      if (fileList[i].type.match(/^image\//)) {
-        file = fileList[i];
-        break;
-      }
-    }
-
-    if (file !== null) {
-        output.src = URL.createObjectURL(file);
-    }
-}
-
-navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-    player.srcObject = stream;
-});
-
-captureButton.addEventListener('click', () => {
-    // Draw the video frame to the canvas.
-    context.drawImage(player, 0, 0, canvas.width, canvas.height);
-    // var data = canvas.toDataURL("image/png");
-    var data = canvas.toDataURL("image/jpeg");
-
-    printOriginal(data);
-
-    // console.log("1: ");
-    // console.log(data);
-
-    // var blob = dataURItoBlob(data);
-
-    // Add a newline after the comma
-    // formattedString = data.replace(',', ',\n');
-    // console.log("2: ");
-    // console.log(formattedString);
-
-    // get everything after "base64,"
-
-    // var exifObj = piexif.load(data);
-    // console.log(exifObj);
-
-    // Needs to be file data . or blob
-  });
-
-  // Attach the video stream to the video element and autoplay.
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then((stream) => {
-      player.srcObject = stream;
-    });
-
-function dataURItoBlob(dataURI) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    var byteString = atob(dataURI.split(',')[1]);
-    
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    
-    // write the bytes of the string to an ArrayBuffer
-    var ab = new ArrayBuffer(byteString.length);
-    
-    // create a view into the buffer
-    var ia = new Uint8Array(ab);
-    
-    // set the bytes of the buffer to the correct values
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-    
-    // write the ArrayBuffer to a blob, and you're done
-    var blob = new Blob([ab], {type: mimeString});
-    return blob;
-    
-    }
-
-function printOriginal(dataURL) {
-    console.log("Begin PrintOrigianal");
-    var exifObj = piexif.load(dataURL);
-    
-    $("#existingDiv").html("");
-
-    for (var ifd in exifObj) {
-        if (ifd == "thumbnail") {
-            continue;
-        }
-        $("#existingDiv").append("<b><p>" + "-" + ifd + "</p></b>");
-        // console.log("-" + ifd);
-        for (var tag in exifObj[ifd]) {
-            // console.log("  " + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag]);
-            $("#existingDiv").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
-            // document.getElementsByTagName("p")[0].innerHTML = document.getElementsByTagName("p")[0].innerHTML + "\n" + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag];
-        }
-        $("#existingDiv").append("<hr>");
-    }
-
-}
-
-function printFileSelect(evt) {
-    console.log("Begin: PrintFileSelect(): ");
-    // File array
-    // console.log(evt);
     // File
-    var f = evt.target.files[0]; // FileList object
-    // console.log(f);
+    file = evt.target.files[0]; // FileList object
+    
     var reader = new FileReader();
-
     reader.onloadend = function(e) {
         // console.log(e);
-        console.log("Start reader onload");
+        console.log("Begin Reading File");
         console.log("-----------------------------------------");
 
-        console.log(e.target.result);
-        var exifObj = piexif.load(e.target.result);
+        exifObj = piexif.load(e.target.result);
 
-        $("#existingDiv").html("");
+        $("#originalMetadata").html("<h2>Original Metadata</h2>");
 
         for (var ifd in exifObj) {
             if (ifd == "thumbnail") {
                 continue;
             }
-            $("#existingDiv").append("<b><p>" + "-" + ifd + "</p></b>");
+            $("#originalMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
             // console.log("-" + ifd);
             for (var tag in exifObj[ifd]) {
-                // console.log("  " + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag]);
-                $("#existingDiv").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
-                // document.getElementsByTagName("p")[0].innerHTML = document.getElementsByTagName("p")[0].innerHTML + "\n" + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag];
+                $("#originalMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+                $("#originalMetadata").append("<hr>");
             }
-            $("#existingDiv").append("<hr>");
         }
 
-        // The Data URL
-        // console.log(e.target.result);
-
-        // for (var ifd in exifObj) {
-        //     if (ifd == "thumbnail") {
-        //         continue;
-        //     }
-        //     console.log("-" + ifd);
-        //     for (var tag in exifObj[ifd]) {
-        //         console.log("  " + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag]);
-        //     }
-        // }
+        // printDataURL(e.target.result);
     };
+    reader.readAsDataURL(file);
+}
+
+function printResizedFileSelect(dataURL, header) {
+    // Parameter = File array
+    
+        // console.log(e);
+        console.log("Begin Reading File");
+        console.log("-----------------------------------------");
+
+        var exifObj = piexif.load(dataURL);
+
+        $("#resizedMetadata").html("<h2>" + header + "</h2>");
+
+        for (var ifd in exifObj) {
+            if (ifd == "thumbnail") {
+                continue;
+            }
+            $("#resizedMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
+            // console.log("-" + ifd);
+            for (var tag in exifObj[ifd]) {
+                $("#resizedMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+                $("#resizedMetadata").append("<hr>");
+            }
+        }
+
+        // printDataURL(e.target.result);
+}
+
+function printResizedCopyFileSelect(dataURL, header) {
+    // Parameter = File array
+    
+        // console.log(e);
+        console.log("Begin Reading File");
+        console.log("-----------------------------------------");
+
+        var exifObj = piexif.load(dataURL);
+
+        $("#resizedMetadataCopied").html("<h2>" + header + "</h2>");
+
+        for (var ifd in exifObj) {
+            if (ifd == "thumbnail") {
+                continue;
+            }
+            $("#resizedMetadataCopied").append("<b><p>" + "-" + ifd + "</p></b>");
+            // console.log("-" + ifd);
+            for (var tag in exifObj[ifd]) {
+                $("#resizedMetadataCopied").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+                $("#resizedMetadataCopied").append("<hr>");
+            }
+        }
+
+        // printDataURL(e.target.result);
+}
+
+// function printResizedFileSelect(dataURL) {
+//     // Parameter = File array
+    
+//     var reader = new FileReader();
+//     reader.onloadend = function(e) {
+//         // console.log(e);
+//         console.log("Begin Reading File");
+//         console.log("-----------------------------------------");
+
+//         var exifObj = piexif.load(e.target.result);
+
+//         $("#resizedMetadata").html("<h2>Resized Metadata</h2>");
+
+//         for (var ifd in exifObj) {
+//             if (ifd == "thumbnail") {
+//                 continue;
+//             }
+//             $("#resizedMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
+//             // console.log("-" + ifd);
+//             for (var tag in exifObj[ifd]) {
+//                 $("#resizedMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+//                 $("#resizedMetadata").append("<hr>");
+//             }
+//         }
+
+//         // printDataURL(e.target.result);
+//     };
+//     reader.readAsDataURL(file);
+// }
+
+// Working
+function displayImage(evt) {
+    document.getElementById("resize").disabled = false;
+
+    var originalImg = document.querySelector("#original");
+    var f = evt.target.files[0]; // FileList object
+    var reader = new FileReader();
+    reader.onloadend = function(e) {
+        console.log("Start reader onload");
+        console.log("-----------------------------------------");
+
+        $("#original-xy").value = "";
+
+        // Create a 'fake' image to get the raw dimensions
+        var img = new Image();
+        img.onload = function(){
+            $("#original-xy").append("Original: " + this.width + " x " + this.height);
+        };
+        img.src = e.target.result
+
+        // console.log(e.target.result);
+        
+
+        originalImg.src = e.target.result
+        // $("#original-xy").append("Original: " + originalImg.width + " x " + originalImg.height);
+        //printDataURL(e.target.result);
+    }
     reader.readAsDataURL(f);
 }
 
-// // Initiate the cameraStart function when the window is finished loading.
-window.addEventListener("load", cameraStart, false);
+// function displayImage(evt) {
+//     document.getElementById("resize").disabled = false;
+
+//     var img = new Image();
+
+//     var f = evt.target.files[0]; // FileList object
+//     var reader = new FileReader();
+//     reader.onloadend = function(e) {
+//         console.log("Start reader onload");
+//         console.log("-----------------------------------------");
+
+//         // console.log(e.target.result);
+//         // $("#original-xy").value = "";
+
+//         img.onload = function(){
+//             alert( this.width+' '+ this.height );
+//         };
+
+//         img.src = e.target.result
+//         // $("#original-xy").append("Original: " + originalImg.width + " x " + originalImg.height);
+//         //printDataURL(e.target.result);
+//     }
+//     reader.readAsDataURL(f);
+// }
+
+function clearImage(evt) {
+    console.log("Image cleared");
+    document.getElementById("resize").disabled = true; 
+    var resizedImg = document.querySelector("#resized");
+    resizedImg.src = "0://";
+}
+
+function defaultValues(evt) {
+    console.log("Values set to default");
+    document.getElementById("height").value = 200;
+    document.getElementById("width").value = 200;
+    document.getElementById("horw").value = "h";
+}
+
+function resizeFileSelect(evt) {
+    // Get values
+    var originalImg = document.querySelector("#original");
+    var resizedImg = document.querySelector("#resized");
+
+    var height = document.getElementById("height").value;
+    var width = document.getElementById("width").value;
+    var horw = document.getElementById("horw").value;
+
+    console.log("height: ");
+    console.log(height);
+
+    console.log("width: ");
+    console.log(width);
+
+    console.log("horw: ");
+    console.log(horw);
+    
+    resizedImg.src = "0://";
+    resizedImg.src = resize(originalImg, height, width, horw);
+
+    printResizedFileSelect(resizedImg.src, "Resized Metadata");
+
+    /* Copy the Original Image's metadata into the Resized Image */
+    // printResizedFileSelect(resizedImg.src, "Resized Metadata Copied");
+
+    var exifBytes = piexif.dump(exifObj);
+    var exifModified = piexif.insert(exifBytes, resizedImg.src);
+    printResizedCopyFileSelect(exifModified, "Resized Metadata Copied");
+
+
+
+    // printDataURL(e.target.result);
+    // var exifObj = piexif.load(e.target.result);
+}
+
+function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
+    // Get the current image dimensions
+    var originalHeight = image.height;
+    var originalWidth = image.width;
+
+    // Calculate the ratio
+    // aspectRatio = width / height
+    var aspectRatio = image.width / image.height;
+
+    console.log("Original Height = " + originalHeight);
+    console.log("Original Width = " + originalWidth);
+
+    console.log("Aspect Ratio = " + aspectRatio);
+
+    // Keep the same aspect ratio when resizing.
+    // newWidth = aspectRatio * height
+
+    // Fix the height or the width
+    if (heightOrWidth == "h") {
+        console.log("----------------------------");
+        console.log("Height Fixed");
+
+        var aspectWidth = wantedHeight * aspectRatio;
+        // console.log("Height = " + wantedHeight);
+        // console.log("Aspect Width = " + aspectWidth);
+        // console.log("Ratio = " + wantedHeight / aspectWidth);
+
+        wantedHeight = wantedHeight;
+        wantedWidth = aspectWidth;
+    }
+    else if (heightOrWidth == "w") {
+        console.log("----------------------------");
+        console.log("Width Fixed");
+
+        var aspectHeight = wantedWidth / aspectRatio;
+        // // console.log("Aspect Height = " + aspectHeight);
+        // // console.log("Width = " + wantedWidth);
+        // // console.log("Ratio = " + wantedWidth / aspectHeight);
+
+        wantedHeight = aspectHeight;
+        wantedWidth = wantedWidth;
+    }
+    else {
+        console.log("Error: Invalid 4th parameter");
+    }
+
+    console.log("Height = " + wantedHeight);
+    console.log("Width = " + wantedWidth);
+    console.log("Ratio = " + wantedWidth / wantedHeight);
+
+    console.log("----------------------------");
+
+    // Create a new canvas
+    var canvas = document.createElement('canvas');
+    // ctx is still part of the canvas
+    var ctx = canvas.getContext('2d');
+    // Set the canvas to the wanted dimensions
+    canvas.height = wantedHeight;
+    canvas.width = wantedWidth;
+
+    // Draw the image to the same dimensions wanted (also same as the canvas)
+    // drawImage(img,x,y,width,height);
+    ctx.drawImage(image, 0, 0, wantedWidth, wantedHeight);
+
+    
+    $("#resized-xy").value = "";
+
+    // Create a 'fake' image to get the raw dimensions
+    $("#resized-xy").append("Resized: " + image.width + " x " + image.height);
+
+    // Get and return the DataUrl
+    var dataURL = canvas.toDataURL('image/jpeg');
+    console.log("dataURL: ");
+    console.log(dataURL);
+    return dataURL;
+}

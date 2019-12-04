@@ -3,24 +3,49 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mobile Metadata Demo</title>
+    <title>Resize Metadata Demo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="piexif.js"></script>
 </head>
 <body style="padding: 0; margin: 0;">
     <!-- Camera -->
     <h2>Print out MetaData</h2>
-    <input type="file" id="file-input" accept="image/*" capture="environment" onchange="printFileSelect(event);" />
-    <!-- <input accept="image/*" capture > -->
+    
+    <input type="file" id="files" class="form" onchange="printOriginalFileSelect(event);displayImage(event)" />
     <br>
-    <video id="player" autoplay></video>
-
-    <button id="capture">Capture</button>
-
-    <canvas id="canvas" width=320 height=240></canvas>
+    <hr>
+    <h2>Resize Image</h2>
+    <label for="width">Width: </label>
+    <input type="text" id="width" value="200">
+    <br>
+    <label for="height">Height: </label>
+    <input type="text" id="height" value="200">
+    <br>
+    <label for="horw">Fix Aspect Ratio (Height or Width)</label>
+    <input type="text" id="horw" value="h">
+    <br>
+    <br>
+    <button id="resize" onclick="resizeFileSelect(event)" disabled>Resize</button>
+    <button onclick="clearImage(event)">Clear</button>
+    <button onclick="defaultValues(event)">Default Values</button>
+    <br>
+    <!-- Original Image -->
+    <br>
+    <div id="original-xy"></div>
+    <br>
+    <img id="original" src="0://" alt="" style="max-width: 400px;">
+    <br>
 
     <br>
-    <div id="existingDiv"></div>
+    <div id="resized-xy">Resized: </div>
+    <br>
+    <img id="resized" src="0://" alt="">    
+    <br>
+    <hr>
+    <div id="originalMetadata" style="width: 33%; float: left;"></div>
+    <div id="resizedMetadata" style="width: 33%; float: left;"></div>
+    <div id="resizedMetadataCopied" style="width: 33%; float: left;"></div>
+
     <!-- Reference to your JavaScript file -->
     <script src="app.js"></script>
 </body>
