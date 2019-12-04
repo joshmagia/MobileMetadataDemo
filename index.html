@@ -9,12 +9,12 @@
 </head>
 <body style="padding: 0; margin: 0;">
     <!-- Camera -->
-    <h2>Print out MetaData</h2>
+    <h2>1) Upload / Take a Photo</h2>
     
     <input type="file" id="files" class="form" onchange="printOriginalFileSelect(event);displayImage(event)" />
     <br>
     <hr>
-    <h2>Resize Image</h2>
+    <h2>2) Resize the Image (parameters)</h2>
     <label for="width">Width: </label>
     <input type="text" id="width" value="200">
     <br>
@@ -37,14 +37,14 @@
     <br>
 
     <br>
-    <div id="resized-xy">Resized: </div>
+    <div id="resized-xy"></div>
     <br>
     <img id="resized" src="0://" alt="">    
     <br>
     <hr>
-    <div id="originalMetadata" style="width: 33%; float: left;"></div>
-    <div id="resizedMetadata" style="width: 33%; float: left;"></div>
-    <div id="resizedMetadataCopied" style="width: 33%; float: left;"></div>
+    <div id="originalMetadata" style="width: 37%; float: left;"></div>
+    <div id="resizedMetadata" style="width: 25%; float: left;"></div>
+    <div id="resizedMetadataCopied" style="width: 37%; float: left;"></div>
 
     <!-- Reference to your JavaScript file -->
     <script src="app.js"></script>

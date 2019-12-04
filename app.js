@@ -145,7 +145,7 @@ function displayImage(evt) {
         console.log("Start reader onload");
         console.log("-----------------------------------------");
 
-        $("#original-xy").value = "";
+        $("#original-xy").html("");
 
         // Create a 'fake' image to get the raw dimensions
         var img = new Image();
@@ -212,6 +212,9 @@ function resizeFileSelect(evt) {
     var width = document.getElementById("width").value;
     var horw = document.getElementById("horw").value;
 
+    // Reset the resized field
+    console.log("Clearing Resize Field");
+
     console.log("height: ");
     console.log(height);
 
@@ -227,11 +230,13 @@ function resizeFileSelect(evt) {
     printResizedFileSelect(resizedImg.src, "Resized Metadata");
 
     /* Copy the Original Image's metadata into the Resized Image */
-    // printResizedFileSelect(resizedImg.src, "Resized Metadata Copied");
-
     var exifBytes = piexif.dump(exifObj);
     var exifModified = piexif.insert(exifBytes, resizedImg.src);
-    printResizedCopyFileSelect(exifModified, "Resized Metadata Copied");
+
+    console.log("exifModified; ");
+    console.log(exifModified);
+    
+    printResizedCopyFileSelect(exifModified, "Metadata Copied Into");
 
 
 
@@ -266,7 +271,7 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
         // console.log("Aspect Width = " + aspectWidth);
         // console.log("Ratio = " + wantedHeight / aspectWidth);
 
-        wantedHeight = wantedHeight;
+        // wantedHeight = wantedHeight;
         wantedWidth = aspectWidth;
     }
     else if (heightOrWidth == "w") {
@@ -278,7 +283,7 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
         // // console.log("Width = " + wantedWidth);
         // // console.log("Ratio = " + wantedWidth / aspectHeight);
 
-        wantedHeight = aspectHeight;
+        // wantedHeight = aspectHeight;
         wantedWidth = wantedWidth;
     }
     else {
@@ -304,10 +309,10 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
     ctx.drawImage(image, 0, 0, wantedWidth, wantedHeight);
 
     
-    $("#resized-xy").value = "";
+    $("#resized-xy").html("");
 
     // Create a 'fake' image to get the raw dimensions
-    $("#resized-xy").append("Resized: " + image.width + " x " + image.height);
+    $("#resized-xy").append("Resized: " + canvas.width + " x " + canvas.height);
 
     // Get and return the DataUrl
     var dataURL = canvas.toDataURL('image/jpeg');
