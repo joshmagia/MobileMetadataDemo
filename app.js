@@ -13,7 +13,7 @@ var file;
 //         image.onload = function() {
 //             var canvas = document.getElementById("canvas");
 //             var ctx = canvas.getContext("2d");
-//             ctx.drawImage(image, 0, 0, 200, 100);                
+//             ctx.drawImage(image, 0, 0, 200, 100);
 //         };
 //     };
 //     reader.readAsDataURL(f);
@@ -189,11 +189,29 @@ function displayImage(evt) {
 //     reader.readAsDataURL(f);
 // }
 
+function convertDataURLtoImage(dataURL) {
+    var img = new Image;
+    img.src = dataURL;
+    return img;
+}
+
 function clearImage(evt) {
     console.log("Image cleared");
     document.getElementById("resize").disabled = true; 
+
+    var originalImg = document.querySelector("#original");
+    originalImg.src = "0://";
+
     var resizedImg = document.querySelector("#resized");
     resizedImg.src = "0://";
+
+    // Clear the dimension divs
+    $("#original-xy").html("");
+    $("#resized-xy").html("");
+
+    // Clear the Metadata Divs
+    $("#originalMetadata").html("");
+    $("#resizedMetadataCopied").html("");
 }
 
 function defaultValues(evt) {
@@ -227,18 +245,25 @@ function resizeFileSelect(evt) {
     resizedImg.src = "0://";
     resizedImg.src = resize(originalImg, height, width, horw);
 
-    printResizedFileSelect(resizedImg.src, "Resized Metadata");
+    // Resized image always has no metadata
+    // printResizedFileSelect(resizedImg.src, "Resized Metadata");
 
     /* Copy the Original Image's metadata into the Resized Image */
     var exifBytes = piexif.dump(exifObj);
     var exifModified = piexif.insert(exifBytes, resizedImg.src);
 
-    console.log("exifModified; ");
-    console.log(exifModified);
+    // console.log("exifModified; ");
+    // console.log(exifModified);
     
-    printResizedCopyFileSelect(exifModified, "Metadata Copied Into");
+    printResizedCopyFileSelect(exifModified, "Resized Metadata");
 
+    // Show link and update it
+    // $("#downloadLink").show();
 
+    // var img = new Image;
+    // img.src = exifModified;
+    // $("#downloadLink").setAttribute("download", "test");
+    // $("#downloadLink").href = exifModified;
 
     // printDataURL(e.target.result);
     // var exifObj = piexif.load(e.target.result);
