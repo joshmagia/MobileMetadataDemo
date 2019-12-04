@@ -11,7 +11,7 @@
     <!-- Camera -->
     <h2>1) Upload / Take a Photo</h2>
     
-    <input type="file" id="files" class="form" onchange="printOriginalFileSelect(event);displayImage(event)" />
+    <input type="file" id="files" accept="image/*" capture="environment" class="form" onchange="printOriginalFileSelect(event);displayImage(event)" />
     <br>
     <hr>
     <h2>2) Resize the Image (parameters)</h2>
