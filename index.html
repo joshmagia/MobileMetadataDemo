@@ -13,6 +13,7 @@
     
     <input type="file" id="files" accept="image/*" class="form" onchange="printOriginalFileSelect(event);displayImage(event)" />
     <br>
+    <div id="error" style="color: red;"></div>
     <hr>
     <h2>2) Resize the Image (parameters)</h2>
     <label for="width">Width: </label>
@@ -29,6 +30,20 @@
     <button onclick="clearImage(event)">Clear</button>
     <button onclick="defaultValues(event)">Default Values</button>
     <br>
+    <hr>
+    <h2>Output Parameters</h2>
+    Date Time:
+    <div id="date-time"></div>
+    <br>
+    Latitiude: 
+    <div id="lat"></div>
+    <br>
+    Longtitude: 
+    <div id="long"></div>
+    <br>
+    Combined: 
+    <div id="lat-long"></div>
+    <hr>
     <!-- Original Image -->
     <br>
     <div id="original-xy"></div>

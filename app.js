@@ -3,6 +3,10 @@ var exifObj;
 
 var file;
 
+// The dimensions of the resized image - set in resize()
+var resizedW;
+var resizedH;
+
 // Draws the metadata into a new image.
 // function handleFileSelect(evt) {
 //     var f = evt.target.files[0]; // FileList object
@@ -24,84 +28,194 @@ function printOriginalFileSelect(evt) {
 
     // File
     file = evt.target.files[0]; // FileList object
+
+    // Make sure resize button is disabled
+    document.getElementById("resize").disabled = true;
     
     var reader = new FileReader();
     reader.onloadend = function(e) {
         // console.log(e);
-        console.log("Begin Reading File");
-        console.log("-----------------------------------------");
 
-        exifObj = piexif.load(e.target.result);
+        try {
+            exifObj = piexif.load(e.target.result);
 
-        $("#originalMetadata").html("<h2>Original Metadata</h2>");
+            /* Get Latitude and Longtitude from the  Exif metadata */
 
-        for (var ifd in exifObj) {
-            if (ifd == "thumbnail") {
-                continue;
+            console.log(exifObj);
+
+            // Latitude
+
+            console.log("---")
+            // latDirection: N
+            var latDir = exifObj.GPS[1];
+            console.log(latDir);
+            // latString: 37,1,53,1,1520,100
+            var lat = exifObj.GPS[2][0][0] + "," + exifObj.GPS[2][0][1] + "," + exifObj.GPS[2][1][0] + "," + exifObj.GPS[2][1][1] + "," + exifObj.GPS[2][2][0] + "," + exifObj.GPS[2][2][1];
+            console.log(lat);
+
+            console.log("---");
+
+            // Longtitude
+
+            var longDir = exifObj.GPS[3];
+            console.log(longDir);
+            var long = exifObj.GPS[4][0][0] + "," + exifObj.GPS[4][0][1] + "," + exifObj.GPS[4][1][0] + "," + exifObj.GPS[4][1][1] + "," + exifObj.GPS[4][2][0] + "," + exifObj.GPS[4][2][1];
+            console.log(long);
+
+            console.log("---");
+
+            /* Convert coordinates to Decimal Degree Format */
+            var ddLat = ConvertDMSToDD(lat, latDir);
+            var ddLong = ConvertDMSToDD(long, longDir);
+
+            // Output Results
+            $("#lat").html("");
+            $("#lat").append(ddLat);
+            $("#long").html("");
+            $("#long").append(ddLong);
+
+            ddLatLong = ddLat + ", " + ddLong;
+
+            $("#lat-long").html("");
+            $("#lat-long").append(ddLatLong);
+
+            // exifObjEditted = overrideDimensions(exifObj);
+
+            // DateTime
+            var dateTime = exifObj["0th"]["306"];
+
+            console.log(dateTime);
+
+            $("#date-time").html("");
+            $("#date-time").append(dateTime);
+
+            /* end edit */
+
+            $("#originalMetadata").html("<h2>Original Metadata</h2>");
+
+            for (var ifd in exifObj) {
+                if (ifd == "thumbnail") {
+                    continue;
+                }
+                $("#originalMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
+                // console.log("-" + ifd);
+                for (var tag in exifObj[ifd]) {
+                    $("#originalMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+                    $("#originalMetadata").append("<hr>");
+                }
             }
-            $("#originalMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
-            // console.log("-" + ifd);
-            for (var tag in exifObj[ifd]) {
-                $("#originalMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
-                $("#originalMetadata").append("<hr>");
-            }
+            // printDataURL(e.target.result);
+
+            // Image uploaded and has metadata so enable resize
+            document.getElementById("resize").disabled = false;
         }
-
-        // printDataURL(e.target.result);
+        catch(err) {
+            console.log("Error: Invalid / No Metadata Detected in Image");
+            $("#error").html("");
+            $("#error").append("Error: Invalid / No Metadata Detected in Image");
+        }
     };
     reader.readAsDataURL(file);
 }
 
-function printResizedFileSelect(dataURL, header) {
-    // Parameter = File array
-    
-        // console.log(e);
-        console.log("Begin Reading File");
-        console.log("-----------------------------------------");
+function ConvertDMSToDD(gpsString, direction) {
+    // ->Input csv string
 
-        var exifObj = piexif.load(dataURL);
+    console.log("Converting coordinates...");
+    // console.log(gpsString);
 
-        $("#resizedMetadata").html("<h2>" + header + "</h2>");
+    // Separate into array
+    var inputArray = gpsString.split(',');
+    // console.log(inputArray);
 
-        for (var ifd in exifObj) {
-            if (ifd == "thumbnail") {
-                continue;
+    var dd; 
+
+    // Validate it has the proper length
+    if (inputArray.length == 6) {
+        var degrees = inputArray[0] / inputArray[1];
+        var minutes = inputArray[2] / inputArray[3];
+        var seconds = inputArray[4] / inputArray[5];
+        
+        dd = degrees + minutes/60 + seconds/(60*60);
+
+        // console.log("Direction: " + direction);
+        if (direction == "S" || direction == "W") {
+            dd = dd * -1;
+        } // Don't do anything for N or E
+    }
+    else {
+        // Error
+        console.log("Error GPS String is an invalid format")
+        dd = "error";
+    }
+    return dd;
+}
+
+function overrideDimensions(inExifData, pixelX, pixelY) {
+    // pixelX and pixelY must be a number)
+    console.log("-------------------------------------");
+    for (var ifd in inExifData) {
+        if (ifd == "thumbnail") {
+            continue;
+        }
+        // console.log("-" + ifd);
+
+        // Loop through the metadata
+        for (var tag in inExifData[ifd]) {
+            // Find PixelX
+            if (piexif.TAGS[ifd][tag]["name"] == "PixelXDimension") {
+                inExifData[ifd][tag] = pixelX;
+                // console.log(pixelX);
+
+                console.log("Pixel X has been overriden in resized image: " + pixelX);
             }
-            $("#resizedMetadata").append("<b><p>" + "-" + ifd + "</p></b>");
-            // console.log("-" + ifd);
-            for (var tag in exifObj[ifd]) {
-                $("#resizedMetadata").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
-                $("#resizedMetadata").append("<hr>");
+            // Find Pixel Y
+            if (piexif.TAGS[ifd][tag]["name"] == "PixelYDimension"){
+                inExifData[ifd][tag] = pixelY;
+                // console.log(pixelY);
+
+                console.log("Pixel Y has been overriden in resized image: " + pixelY);
             }
         }
+    }
+    console.log("-------------------------------------");
 
-        // printDataURL(e.target.result);
+    // console.log("After");
+    // console.log(inExifData);
+    
+    return inExifData;
+
 }
 
 function printResizedCopyFileSelect(dataURL, header) {
     // Parameter = File array
     
-        // console.log(e);
-        console.log("Begin Reading File");
-        console.log("-----------------------------------------");
+    // console.log(e);
 
-        var exifObj = piexif.load(dataURL);
+    // Load the metadata URL into an object
+    var exifObj = piexif.load(dataURL);
 
-        $("#resizedMetadataCopied").html("<h2>" + header + "</h2>");
+    // Get resizedDimensions
 
-        for (var ifd in exifObj) {
-            if (ifd == "thumbnail") {
-                continue;
-            }
-            $("#resizedMetadataCopied").append("<b><p>" + "-" + ifd + "</p></b>");
-            // console.log("-" + ifd);
-            for (var tag in exifObj[ifd]) {
-                $("#resizedMetadataCopied").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
-                $("#resizedMetadataCopied").append("<hr>");
-            }
+
+    // Override the Pixel Dimensions
+    exifObjEditted = overrideDimensions(exifObj, resizedW, resizedH);
+
+    $("#resizedMetadataCopied").html("<h2>" + header + "</h2>");
+
+    for (var ifd in exifObj) {
+        if (ifd == "thumbnail") {
+            continue;
         }
+        $("#resizedMetadataCopied").append("<b><p>" + "-" + ifd + "</p></b>");
+        // console.log("-" + ifd);
+        for (var tag in exifObj[ifd]) {
+            $("#resizedMetadataCopied").append("<p style=\"margin-left: 15px;\">" + "<b>" + piexif.TAGS[ifd][tag]["name"] + "</b>" + ":" + exifObj[ifd][tag] + "</p>");
+            $("#resizedMetadataCopied").append("<hr>");
+        }
+    }
 
-        // printDataURL(e.target.result);
+    // printDataURL(e.target.result);
 }
 
 // function printResizedFileSelect(dataURL) {
@@ -136,15 +250,11 @@ function printResizedCopyFileSelect(dataURL, header) {
 
 // Working
 function displayImage(evt) {
-    document.getElementById("resize").disabled = false;
 
     var originalImg = document.querySelector("#original");
     var f = evt.target.files[0]; // FileList object
     var reader = new FileReader();
     reader.onloadend = function(e) {
-        console.log("Start reader onload");
-        console.log("-----------------------------------------");
-
         $("#original-xy").html("");
 
         // Create a 'fake' image to get the raw dimensions
@@ -199,19 +309,31 @@ function clearImage(evt) {
     console.log("Image cleared");
     document.getElementById("resize").disabled = true; 
 
+    // Clear the file picker
+    $("#files").val("");
+
+    // Clear the error message
+    $("#error").html("");
+
     var originalImg = document.querySelector("#original");
     originalImg.src = "0://";
 
     var resizedImg = document.querySelector("#resized");
     resizedImg.src = "0://";
 
-    // Clear the dimension divs
+    // Clear the dimension Divs
     $("#original-xy").html("");
-    $("#resized-xy").html("");
+    $("#resized-xy").clear("");
 
     // Clear the Metadata Divs
     $("#originalMetadata").html("");
     $("#resizedMetadataCopied").html("");
+
+    // Clear Output Parameter Divs
+    $("#date-time").html("");
+    $("#lat").html("");
+    $("#long").html("");
+    $("#lat-long").html("");
 }
 
 function defaultValues(evt) {
@@ -245,15 +367,10 @@ function resizeFileSelect(evt) {
     resizedImg.src = "0://";
     resizedImg.src = resize(originalImg, height, width, horw);
 
-    // Resized image always has no metadata
-    // printResizedFileSelect(resizedImg.src, "Resized Metadata");
 
     /* Copy the Original Image's metadata into the Resized Image */
     var exifBytes = piexif.dump(exifObj);
     var exifModified = piexif.insert(exifBytes, resizedImg.src);
-
-    // console.log("exifModified; ");
-    // console.log(exifModified);
     
     printResizedCopyFileSelect(exifModified, "Resized Metadata");
 
@@ -274,8 +391,7 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
     var originalHeight = image.height;
     var originalWidth = image.width;
 
-    // Calculate the ratio
-    // aspectRatio = width / height
+    // Calculate the Aspect Ratio = Width / Height
     var aspectRatio = image.width / image.height;
 
     console.log("Original Height = " + originalHeight);
@@ -292,11 +408,7 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
         console.log("Height Fixed");
 
         var aspectWidth = wantedHeight * aspectRatio;
-        // console.log("Height = " + wantedHeight);
-        // console.log("Aspect Width = " + aspectWidth);
-        // console.log("Ratio = " + wantedHeight / aspectWidth);
 
-        // wantedHeight = wantedHeight;
         wantedWidth = aspectWidth;
     }
     else if (heightOrWidth == "w") {
@@ -304,12 +416,8 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
         console.log("Width Fixed");
 
         var aspectHeight = wantedWidth / aspectRatio;
-        // // console.log("Aspect Height = " + aspectHeight);
-        // // console.log("Width = " + wantedWidth);
-        // // console.log("Ratio = " + wantedWidth / aspectHeight);
 
-        // wantedHeight = aspectHeight;
-        wantedWidth = wantedWidth;
+        wantedHeight = aspectHeight;
     }
     else {
         console.log("Error: Invalid 4th parameter");
@@ -333,11 +441,13 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
     // drawImage(img,x,y,width,height);
     ctx.drawImage(image, 0, 0, wantedWidth, wantedHeight);
 
-    
+    // Clear the dimensions div incase of consecutive uploads
     $("#resized-xy").html("");
-
-    // Create a 'fake' image to get the raw dimensions
     $("#resized-xy").append("Resized: " + canvas.width + " x " + canvas.height);
+
+    // Save the resized image height in global variables
+    resizedW = canvas.width;
+    resizedH = canvas.height;
 
     // Get and return the DataUrl
     var dataURL = canvas.toDataURL('image/jpeg');
