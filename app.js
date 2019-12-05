@@ -315,15 +315,13 @@ function clearImage(evt) {
     // Clear the error message
     $("#error").html("");
 
-    var originalImg = document.querySelector("#original");
-    originalImg.src = "0://";
-
-    var resizedImg = document.querySelector("#resized");
-    resizedImg.src = "0://";
+    // Clear the images
+    document.querySelector("#original").src = "0://";
+    document.querySelector("#resized").src = "0://";
 
     // Clear the dimension Divs
     $("#original-xy").html("");
-    $("#resized-xy").clear("");
+    $("#resized-xy").html("");
 
     // Clear the Metadata Divs
     $("#originalMetadata").html("");
