@@ -453,3 +453,21 @@ function resize(image, wantedHeight, wantedWidth, heightOrWidth) {
     console.log(dataURL);
     return dataURL;
 }
+
+$(".downloadupaddinvoice").click(function(){
+    var filename = $('#files').val();
+
+    if (filename == "" || filename == null) {
+        alert('Error');
+    }else {
+        var file = document.getElementById('files').files[0];      
+        var filename = document.getElementById('files').files[0].name;      
+        var blob = new Blob([file]);
+        var url  = URL.createObjectURL(blob);
+
+        $(this).attr({ 'download': filename, 'href': url});  
+        filename = "";
+    }
+
+})  
+
