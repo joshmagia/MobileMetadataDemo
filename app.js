@@ -373,8 +373,8 @@ function resize(image, wantedHeight, wantedWidth) {
     // ctx is still part of the canvas
     var ctx = canvas.getContext('2d');
     // Set the canvas to the wanted dimensions
-    canvas.height = outputHeight;
-    canvas.width = outputWidth;
+    canvas.height = outputHeight + 100;
+    canvas.width = outputWidth + 100;
 
     // Draw the image to the same dimensions wanted (also same as the canvas)
     // drawImage(img,x,y,width,height);
