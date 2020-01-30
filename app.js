@@ -350,6 +350,8 @@ function resize(image, wantedHeight, wantedWidth) {
     console.log("Width = " + outputWidth);
     console.log("Ratio = " + outputWidth / outputHeight);
 
+
+
     console.log("----------------------------");
 
     // Create a new canvas
@@ -371,6 +373,9 @@ function resize(image, wantedHeight, wantedWidth) {
     // Save the resized image height in global variables
     resizedW = canvas.width;
     resizedH = canvas.height;
+
+    $("#error").append("<br>canvas.height: " +  canvas.height);
+    $("#error").append("<br>canvas.width: " +  canvas.width);
 
     // Get and return the DataUrl
     var dataURL = canvas.toDataURL('image/jpeg');
