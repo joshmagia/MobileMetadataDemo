@@ -242,9 +242,9 @@ function resizeFile() {
     // getLocation();
     
     // Override the pixelX and pixelY fields in the original image's exifObject
-    exifObjEditted = overrideDimensions(exifObj, resizedW, resizedH);
+    // exifObjEditted = overrideDimensions(exifObj, resizedW, resizedH);
     // Dump the exifObject back into bytes
-    var exifEdittedBytes = piexif.dump(exifObjEditted);
+    // var exifEdittedBytes = piexif.dump(exifObjEditted);
     // Combine the bytes of the original image's exifObject into the resized image's dataURL,
     // returning a new dataURL
 
@@ -252,13 +252,19 @@ function resizeFile() {
     // console.log("exifEdittedBytes: ");
     // console.log(exifEdittedBytes);
 
-    var resizedEdittedURL = piexif.insert(exifEdittedBytes, resizedImg.src);
+    // var resizedEdittedURL = piexif.insert(exifEdittedBytes, resizedImg.src);
 
     // console.log("Exif !! - end of resized()");
     // console.log(exifObj);
 
     // Save the finished resized image's dataURL to the global variable 
-    gDataURL = resizedEdittedURL;
+    // gDataURL = resizedEdittedURL;
+
+    gDataURL = resizedImg.src;
+
+    $("#error").append("<br>resizedImg Height: " +  resizedImg.height);
+    $("#error").append("<br>resizedImg Width: " +  resizedImg.width);
+    
 
     // Complete - Enable Submit Button
     
