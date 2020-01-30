@@ -264,6 +264,12 @@ function resizeFile() {
 
     $("#error").append("<br>resizedImg Height: " +  resizedImg.height);
     $("#error").append("<br>resizedImg Width: " +  resizedImg.width);
+
+    resizedImg.height = 150;
+    resizedImg.width = 200;
+
+    $("#error").append("<br>resizedImg Height: " +  resizedImg.height);
+    $("#error").append("<br>resizedImg Width: " +  resizedImg.width);
     
 
     // Complete - Enable Submit Button
