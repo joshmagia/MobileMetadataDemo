@@ -12,12 +12,12 @@ window.onload = function() {
 
     // Render resized image into canvas element.
     var resCanvas1 = document.getElementById('resultCanvas1');
-    mpImg.render(resCanvas1, { maxWidth: 300, maxHeight: 300 });
+    mpImg.render(resCanvas1, { maxWidth: 800, maxHeight: 1000 });
 
     // Render resized image into canvas element, rotating orientation = 6 (90 deg rotate right)
     // Types of orientation is defined in EXIF specification.
     // To detect orientation of JPEG file in JS, you can use exif.js from https://github.com/jseidelin/exif-js
     var resCanvas2 = document.getElementById('resultCanvas2');
-    mpImg.render(resCanvas2, { maxWidth: 300, maxHeight: 300, orientation: 6 });
+    mpImg.render(resCanvas2, { maxWidth: 1000, maxHeight: 1500, orientation: 6 });
   };
 };
