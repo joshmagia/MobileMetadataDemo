@@ -395,7 +395,7 @@ function resize(image, wantedHeight, wantedWidth) {
     // resizedH = canvas.height;
 
     // MegaPixImage constructor accepts File/Blob object. - Global File
-    var mpImg = new MegaPixImage(gFile);
+    var mpImg = new MegaPixImage(image);
     var canvas = document.getElementById("canvasTest");
     mpImg.render(canvas, { maxWidth: outputWidth, maxHeight: outputHeight });
 
