@@ -80,6 +80,8 @@ var gLong;
 var gLatLong;
 var gDataURL;
 
+var gFile;
+
 // Initialize Global Variables
 var exifObj;
 // var file;
@@ -165,6 +167,9 @@ function printOriginalFileSelect(evt, inject) {
 
     // File
     var file = evt.target.files[0]; // FileList object
+
+    // Global store original file
+    gFile = evt.target.files[0];
     
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -369,25 +374,30 @@ function resize(image, wantedHeight, wantedWidth) {
     // Create a new canvas
     // var canvas = document.createElement('canvas');
 
-    var canvas = document.getElementById("canvasTest");
-    // ctx is still part of the canvas
-    var ctx = canvas.getContext('2d');
-    // Set the canvas to the wanted dimensions
-    canvas.height = outputHeight + 100;
-    canvas.width = outputWidth + 100;
+    // var canvas = document.getElementById("canvasTest");
+    // // ctx is still part of the canvas
+    // var ctx = canvas.getContext('2d');
+    // // Set the canvas to the wanted dimensions
+    // canvas.height = outputHeight;
+    // canvas.width = outputWidth;
 
-    // Draw the image to the same dimensions wanted (also same as the canvas)
-    // drawImage(img,x,y,width,height);
+    // // Draw the image to the same dimensions wanted (also same as the canvas)
+    // // drawImage(img,x,y,width,height);
+    // // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-    // Clear the dimensions div incase of consecutive uploads
-    $("#resized-xy").html("");
-    $("#resized-xy").append("Resized Image Dimensions: " + canvas.width + " x " + canvas.height);
+    // // Clear the dimensions div incase of consecutive uploads
+    // $("#resized-xy").html("");
+    // $("#resized-xy").append("Resized Image Dimensions: " + canvas.width + " x " + canvas.height);
 
-    // Save the resized image height in global variables
-    resizedW = canvas.width;
-    resizedH = canvas.height;
+    // // Save the resized image height in global variables
+    // resizedW = canvas.width;
+    // resizedH = canvas.height;
+
+    // MegaPixImage constructor accepts File/Blob object. - Global File
+    var mpImg = new MegaPixImage(gFile);
+    var canvas = document.getElementById("canvasTest");
+    mpImg.render(canvas, { maxWidth: outputWidth, maxHeight: outputHeight });
 
     $("#error").append("<br>canvas.height: " +  canvas.height);
     $("#error").append("<br>canvas.width: " +  canvas.width);
