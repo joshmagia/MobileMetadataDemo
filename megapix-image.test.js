@@ -18,6 +18,6 @@ window.onload = function() {
     // Types of orientation is defined in EXIF specification.
     // To detect orientation of JPEG file in JS, you can use exif.js from https://github.com/jseidelin/exif-js
     var resCanvas2 = document.getElementById('resultCanvas2');
-    mpImg.render(resCanvas2, { maxWidth: 1000, maxHeight: 1500, orientation: 6 });
+    mpImg.render(resCanvas2, { maxWidth: 1500, maxHeight: 1500, orientation: 6 });
   };
 };
