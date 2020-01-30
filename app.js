@@ -190,7 +190,7 @@ function printOriginalFileSelect(evt, inject) {
             console.log("Adding image to original");
             originalImg.src = gDataURL;
 
-            // resizeFile();
+            resizeFile();
             console.log("Adding image to resized");
             resizedImg.src = gDataURL;
 
