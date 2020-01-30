@@ -1,0 +1,14 @@
+CACHE MANIFEST
+# rev 1.0.5
+CACHE:
+# Main Files
+index.html
+app.js
+config.js
+# JavaScript
+js/jquery-3.4.1.min.js
+js/bootstrap.min.js
+js/piexif.js
+# CSS
+css/styles.css
+css/bootstrap.min.css
