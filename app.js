@@ -268,7 +268,7 @@ function resizeFile() {
 
     // Complete - Enable Submit Button
     
-    printResizedCopyFileSelect(resizedEdittedURL, "Resized Metadata");
+    // printResizedCopyFileSelect(resizedEdittedURL, "Resized Metadata");
 }
 
 function resize(image, wantedHeight, wantedWidth) {
