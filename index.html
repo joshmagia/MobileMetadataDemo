@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>megapix-image.js test</title>
+    <title>images to test</title>
     <meta charset="utf-8">
     <script src="../src/megapix-image.js"></script>
-    <script src="./megapix-image.test.js"></script>
+    <script src="./images.test.js"></script>
   </head>
   <body>
-    Select MegaPixel Photo: <input type="file" id="fileInput">
+    <select id="imageSelect"></select>
+    <hr>
     <br/>
-    Image: <br/>
-    <img id="resultImage">
+    Original Image: <br/>
+    <img id="original">
     <br/>
-    Canvas:<br/>
-    <canvas id="resultCanvas1"></canvas>
+    <hr>
+    Rendered in canvas (without megapix-image):<br/>
+    <canvas id="raw"></canvas>
     <br/>
-    Canvas (rotated):<br/>
-    <canvas id="resultCanvas2"></canvas>
+    Rendered in canvas with megapix image:<br/>
+    <canvas id="megapix"></canvas>
   </body>
 </html>
