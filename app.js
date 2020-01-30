@@ -367,7 +367,9 @@ function resize(image, wantedHeight, wantedWidth) {
     console.log("----------------------------");
 
     // Create a new canvas
-    var canvas = document.createElement('canvas');
+    // var canvas = document.createElement('canvas');
+
+    var canvas = document.getElementById("canvasTest");
     // ctx is still part of the canvas
     var ctx = canvas.getContext('2d');
     // Set the canvas to the wanted dimensions
@@ -377,7 +379,7 @@ function resize(image, wantedHeight, wantedWidth) {
     // Draw the image to the same dimensions wanted (also same as the canvas)
     // drawImage(img,x,y,width,height);
     // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(image, 0, 20, canvas.width, canvas.height);
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
     // Clear the dimensions div incase of consecutive uploads
     $("#resized-xy").html("");
