@@ -376,7 +376,8 @@ function resize(image, wantedHeight, wantedWidth) {
 
     // Draw the image to the same dimensions wanted (also same as the canvas)
     // drawImage(img,x,y,width,height);
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(image, 50, 50, canvas.width, canvas.height);
 
     // Clear the dimensions div incase of consecutive uploads
     $("#resized-xy").html("");
