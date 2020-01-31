@@ -25,5 +25,5 @@ var config  = {
     IMAGE_HEIGHT: 720,
 
     // Version number: to be incremented on change
-    VERSION_NUMBER: '1.0.999'
+    VERSION_NUMBER: '1.0.888'
 }
