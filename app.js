@@ -395,63 +395,64 @@ function resize(image, wantedHeight, wantedWidth) {
     // // Get and return the DataUrl
     // var dataURL = canvas.toDataURL('image/jpeg');
 
-    var testImg;
+    // var testImg = image;
 
     console.log("Calling loadImage()");
-    loadImage(
-        gDataURL,
-        function(img) {
-          document.body.appendChild(img);
-          testImg = img;
-          console.log(img);
-        },
-        { maxWidth: 300 } // Options
+    // loadImage(
+    //     gDataURL,
+    //     function(img) {
+    //       document.body.appendChild(img);
+    //       testImg = img;
+    //       console.log(img);
+    //     },
+    //     { maxWidth: 300 } // Options
+    // );
+
+    var scaledImage = loadImage.scale(
+        image, // img or canvas element
+        { maxWidth: 200 }
     );
+
+    document.body.appendChild(scaledImage);
+
     console.log("Finished calling loadImage()");
 
-    setTimeout(function(){ 
+    // setTimeout(function(){ 
 
-        // ----
-        // Create a new canvas
-        var canvas = document.createElement('canvas');
+    //     // ----
+    //     // Create a new canvas
+    //     var canvas = document.createElement('canvas');
 
-        var canvas = document.getElementById("canvasTest");
-        // ctx is still part of the canvas
-        var ctx = canvas.getContext('2d');
-        // Set the canvas to the wanted dimensions
-        canvas.height = outputHeight;
-        canvas.width = outputWidth;
+    //     var canvas = document.getElementById("canvasTest");
+    //     // ctx is still part of the canvas
+    //     var ctx = canvas.getContext('2d');
+    //     // Set the canvas to the wanted dimensions
+    //     canvas.height = outputHeight;
+    //     canvas.width = outputWidth;
 
-        // Draw the image to the same dimensions wanted (also same as the canvas)
-        // drawImage(img,x,y,width,height);
-        // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(testImg, 0, 0, canvas.width, canvas.height);
+    //     // Draw the image to the same dimensions wanted (also same as the canvas)
+    //     // drawImage(img,x,y,width,height);
+    //     // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    //     ctx.drawImage(testImg, 0, 0, canvas.width, canvas.height);
 
-        // Clear the dimensions div incase of consecutive uploads
-        $("#resized-xy").html("");
-        $("#resized-xy").append("Resized Image Dimensions: " + canvas.width + " x " + canvas.height);
+    //     // Clear the dimensions div incase of consecutive uploads
+    //     $("#resized-xy").html("");
+    //     $("#resized-xy").append("Resized Image Dimensions: " + canvas.width + " x " + canvas.height);
 
-        // Save the resized image height in global variables
-        resizedW = canvas.width;
-        resizedH = canvas.height;
+    //     // Save the resized image height in global variables
+    //     resizedW = canvas.width;
+    //     resizedH = canvas.height;
 
-        $("#error").append("<br>canvas.height: " +  canvas.height);
-        $("#error").append("<br>canvas.width: " +  canvas.width);
+    //     $("#error").append("<br>canvas.height: " +  canvas.height);
+    //     $("#error").append("<br>canvas.width: " +  canvas.width);
 
-        // Get and return the DataUrl
-        var dataURL = canvas.toDataURL('image/jpeg');
+    //     // Get and return the DataUrl
+    //     var dataURL = canvas.toDataURL('image/jpeg');
 
-
-
-        // var scaledImage = loadImage.scale(
-        //     image, // img or canvas element
-        //     { maxWidth: 600 }
-        //   );
-
-        // var dataURL = "";
+        var dataURL = "";
         console.log(dataURL);
         return dataURL;
-    }, 3000);
+    // }, 3000);
 }
 
 function clearImage() {
