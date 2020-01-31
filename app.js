@@ -402,10 +402,7 @@ function resize(image, wantedHeight, wantedWidth) {
           document.body.appendChild(img);
           console.log(img);
         },
-        { maxHeight: 600,
-          minHeight: 600,
-          maxWidth: 300,
-          minWidth: 300 } // Options
+        { maxWidth: 300 } // Options
     );
     console.log("Finished calling loadImage()");
 
