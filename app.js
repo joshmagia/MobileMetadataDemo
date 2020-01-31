@@ -398,19 +398,19 @@ function resize(image, wantedHeight, wantedWidth) {
     // var testImg = image;
 
     console.log("Calling loadImage()");
-    // loadImage(
-    //     gDataURL,
-    //     function(img) {
-    //       document.body.appendChild(img);
-    //       testImg = img;
-    //       console.log(img);
-    //     },
-    //     { maxWidth: 300 } // Options
-    // );
+    loadImage(
+        gDataURL,
+        function(img) {
+            document.body.appendChild(img);
+            testImg = img;
+            console.log(img);
+        },
+        { maxWidth: 300 } // Options
+    );
 
     var scaledImage = loadImage.scale(
         image, // img or canvas element
-        { maxWidth: 200 }
+        { maxWidth: 300 }
     );
 
     document.body.appendChild(scaledImage);
