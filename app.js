@@ -405,12 +405,14 @@ function resize(image, wantedHeight, wantedWidth) {
             testImg = img;
             console.log(img);
         },
-        { maxWidth: 300 } // Options
+        { maxWidth: 300,
+          orientation: true } // Options
     );
 
     var scaledImage = loadImage.scale(
         image, // img or canvas element
-        { maxWidth: 300 }
+        { maxWidth: 300,
+          orientation: true }
     );
 
     document.body.appendChild(scaledImage);
