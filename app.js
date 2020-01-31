@@ -415,7 +415,7 @@ function resize(image, wantedHeight, wantedWidth) {
     //       orientation: true }
     // );
 
-    document.body.appendChild(scaledImage);
+    // document.body.appendChild(scaledImage);
 
     console.log("Finished calling loadImage()");
 
