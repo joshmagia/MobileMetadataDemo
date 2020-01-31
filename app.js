@@ -398,16 +398,6 @@ function resize(image, wantedHeight, wantedWidth) {
     // var testImg = image;
 
     console.log("Calling loadImage()");
-    loadImage(
-        gDataURL,
-        function(img) {
-            document.body.appendChild(img);
-            testImg = img;
-            console.log(img);
-        },
-        { maxWidth: 300,
-          orientation: true } // Options
-    );
 
     var scaledImage = loadImage.scale(
         image, // img or canvas element
