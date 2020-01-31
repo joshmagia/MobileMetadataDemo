@@ -80,8 +80,6 @@ var gLong;
 var gLatLong;
 var gDataURL;
 
-var gFile;
-
 // Initialize Global Variables
 var exifObj;
 // var file;
@@ -167,9 +165,6 @@ function printOriginalFileSelect(evt, inject) {
 
     // File
     var file = evt.target.files[0]; // FileList object
-
-    // Global store original file
-    gFile = evt.target.files[0];
     
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -394,17 +389,29 @@ function resize(image, wantedHeight, wantedWidth) {
     // resizedW = canvas.width;
     // resizedH = canvas.height;
 
-    // MegaPixImage constructor accepts File/Blob object. - Global File
-    var mpImg = new MegaPixImage(image);
-    var canvas = document.getElementById("canvasTest");
-    mpImg.render(canvas, { maxWidth: outputWidth, maxHeight: outputHeight });
+    // $("#error").append("<br>canvas.height: " +  canvas.height);
+    // $("#error").append("<br>canvas.width: " +  canvas.width);
 
-    $("#error").append("<br>canvas.height: " +  canvas.height);
-    $("#error").append("<br>canvas.width: " +  canvas.width);
+    // // Get and return the DataUrl
+    // var dataURL = canvas.toDataURL('image/jpeg');
 
-    // Get and return the DataUrl
-    var dataURL = canvas.toDataURL('image/jpeg');
+    console.log("Calling loadImage()");
+    loadImage(
+        gDataURL,
+        function(img) {
+          document.body.appendChild(img);
+          console.log(img);
+        },
+        { maxWidth: 200 } // Options
+    );
+    console.log("Finished calling loadImage()");
 
+    // var scaledImage = loadImage.scale(
+    //     image, // img or canvas element
+    //     { maxWidth: 600 }
+    //   );
+
+    var dataURL = "";
     return dataURL;
 }
 
