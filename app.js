@@ -398,12 +398,22 @@ function resize(image, wantedHeight, wantedWidth) {
     // var testImg = image;
 
     console.log("Calling loadImage()");
-
-    var scaledImage = loadImage.scale(
-        image, // img or canvas element
+    loadImage(
+        gDataURL,
+        function(img) {
+            document.body.appendChild(img);
+            testImg = img;
+            console.log(img);
+        },
         { maxWidth: 300,
-          orientation: true }
+          orientation: true } // Options
     );
+
+    // var scaledImage = loadImage.scale(
+    //     image, // img or canvas element
+    //     { maxWidth: 300,
+    //       orientation: true }
+    // );
 
     document.body.appendChild(scaledImage);
 
