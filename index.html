@@ -33,6 +33,9 @@
 
                         var tags = findEXIFinHEIC(reader.result);
 
+                        $("html").append("<br>File name = " + e.target.files[0].name);
+                        $("html").append("<br>File type = " + e.target.files[0].type);
+
 
                         Object.keys(tags).forEach(function (item) {
                             console.log(item + ": " + tags[item]); // key: value
