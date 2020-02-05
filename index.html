@@ -32,6 +32,102 @@
                         var longitudeComponents = tags["GPSLongitude"];
                         var longitudeRef = tags["GPSLongitudeRef"];
 
+                        if (latitudeComponents) {
+                            console.log("GPSLatitude:");
+                            console.log(latitudeComponents);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No GPSLatitude");
+                            console.log("--------------");
+                        }
+                        if (latitudeRef) {
+                            console.log("GPSLatitudeRef:");
+                            console.log(latitudeRef);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No GPSLatitudeRef");
+                            console.log("--------------");
+                        }
+
+                        if (longitudeComponents) {
+                            console.log("GPSLongitude:");
+                            console.log(longitudeComponents);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No GPSLongitude");
+                            console.log("--------------");
+                        }
+                        if (longitudeRef) {
+                            console.log("GPSLongitudeRef:");
+                            console.log(longitudeRef);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No longitudeRef");
+                            console.log("--------------");
+                        }
+
+                        // Date Time
+                        var pixelX = tags["PixelXDimension"];
+                        var pixelY = tags["PixelYDimension"];
+
+                        if (pixelX) {
+                            console.log("PixelXDimension:");
+                            console.log(pixelX);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No pixelX");
+                            console.log("--------------");
+                        }
+                        if (pixelY) {
+                            console.log("PixelYDimension:");
+                            console.log(pixelY);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No pixelY");
+                            console.log("--------------");
+                        }
+
+                        // Date Time
+                        var dateTime = tags["dateTime"];
+                        var dateTimeOriginal = tags["DateTimeOriginal"];
+                        var DateTimeDigitized = tags["DateTimeDigitized"];
+
+                        if (dateTime) {
+                            console.log("dateTime:");
+                            console.log(dateTime);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No dateTime");
+                            console.log("--------------");
+                        }
+                        if (dateTimeOriginal) {
+                            console.log("dateTimeOriginal:");
+                            console.log(dateTimeOriginal);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No dateTimeOriginal");
+                            console.log("--------------");
+                        }
+                        if (DateTimeDigitized) {
+                            console.log("DateTimeDigitized:");
+                            console.log(DateTimeDigitized);
+                            console.log("--------------");
+                        }
+                        else {
+                            console.log("No DateTimeDigitized");
+                            console.log("--------------");
+                        }
+
+                        // Output
+
                         document.getElementById("gps-coordinates").innerHTML = "The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + longitudeComponents + " " + longitudeRef + ".";
                     };
 
