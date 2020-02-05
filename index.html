@@ -33,8 +33,10 @@
 
                         var tags = findEXIFinHEIC(reader.result);
 
+                        $("html").append("<br>-----File Data: -----");
                         $("html").append("<br>File name = " + e.target.files[0].name);
                         $("html").append("<br>File type = " + e.target.files[0].type);
+                        $("html").append("<br>-----Metadata: -----");
 
 
                         Object.keys(tags).forEach(function (item) {
