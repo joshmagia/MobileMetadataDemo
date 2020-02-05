@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Exif-HEIC.js</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     </head>
     <body>
         <div>
@@ -14,134 +15,188 @@
         </div>
         <div>
             <span id="gps-coordinates"></span>
+            <br>
+            <h3>Metadata: </h3>
+            <div id="metadata"></div>
         </div>
         <script src="exif-heic.js"></script>
         <script>
             document.getElementById("photo").onchange = function (e)
             {
-                if (e.target.files[0].name.toLowerCase().endsWith(".heic"))
-                {
+                // if (e.target.files[0].name.toLowerCase().endsWith(".heic"))
+                // {
                     var reader = new FileReader();
 
                     reader.onload = function ()
                     {
                         console.log("In file reader");
+
                         var tags = findEXIFinHEIC(reader.result);
 
-                        var latitudeComponents = tags["GPSLatitude"];
-                        var latitudeRef = tags["GPSLatitudeRef"];
-                        var longitudeComponents = tags["GPSLongitude"];
-                        var longitudeRef = tags["GPSLongitudeRef"];
 
-                        if (latitudeComponents) {
-                            console.log("GPSLatitude:");
-                            console.log(latitudeComponents);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No GPSLatitude");
-                            console.log("--------------");
-                        }
-                        if (latitudeRef) {
-                            console.log("GPSLatitudeRef:");
-                            console.log(latitudeRef);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No GPSLatitudeRef");
-                            console.log("--------------");
-                        }
+                        Object.keys(tags).forEach(function (item) {
+                            console.log(item + ": " + tags[item]); // key: value
+                            $("html").append("<br>" + item + ": " + tags[item]);
+                            console.log("----------");
+                        })
+                        // try {
 
-                        if (longitudeComponents) {
-                            console.log("GPSLongitude:");
-                            console.log(longitudeComponents);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No GPSLongitude");
-                            console.log("--------------");
-                        }
-                        if (longitudeRef) {
-                            console.log("GPSLongitudeRef:");
-                            console.log(longitudeRef);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No longitudeRef");
-                            console.log("--------------");
-                        }
+                        //     // var debugFiles = evt.target.files
+                        //     // var debugFilename = debugFiles[0].name
+                        //     // var debugExtension = debugFiles[0].type
 
-                        // Date Time
-                        var pixelX = tags["PixelXDimension"];
-                        var pixelY = tags["PixelYDimension"];
+                        //     // e.target.files[0].name;
+                        //     // e.target.files[0].type;
+                        //     document.getElementById("gps-coordinates").append("File name = " + e.target.files[0].name);
+                        //     document.getElementById("gps-coordinates").append("File type = " + e.target.files[0].type);
 
-                        if (pixelX) {
-                            console.log("PixelXDimension:");
-                            console.log(pixelX);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No pixelX");
-                            console.log("--------------");
-                        }
-                        if (pixelY) {
-                            console.log("PixelYDimension:");
-                            console.log(pixelY);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No pixelY");
-                            console.log("--------------");
-                        }
+                        //     console.log(e.target.files[0]);
 
-                        // Date Time
-                        var dateTime = tags["dateTime"];
-                        var dateTimeOriginal = tags["DateTimeOriginal"];
-                        var DateTimeDigitized = tags["DateTimeDigitized"];
+                        //     var tags = findEXIFinHEIC(reader.result);
 
-                        if (dateTime) {
-                            console.log("dateTime:");
-                            console.log(dateTime);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No dateTime");
-                            console.log("--------------");
-                        }
-                        if (dateTimeOriginal) {
-                            console.log("dateTimeOriginal:");
-                            console.log(dateTimeOriginal);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No dateTimeOriginal");
-                            console.log("--------------");
-                        }
-                        if (DateTimeDigitized) {
-                            console.log("DateTimeDigitized:");
-                            console.log(DateTimeDigitized);
-                            console.log("--------------");
-                        }
-                        else {
-                            console.log("No DateTimeDigitized");
-                            console.log("--------------");
-                        }
+                        //     document.getElementById("gps-coordinates").append(tags);
 
-                        // Output
+                        //     console.log(tags);
 
-                        document.getElementById("gps-coordinates").innerHTML = 
-                        "The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + 
-                        longitudeComponents + " " + longitudeRef + "<br>" + 
-                        "pixelX= " + pixelX + ", pixelY= " + pixelX + "<br>" +
-                        "DateTime= " + dateTime + ", dateTimeOriginal= " + dateTimeOriginal + ", DateTimeDigitized: " + DateTimeDigitized;
+                        //     var latitudeComponents = tags["GPSLatitude"];
+                        // var latitudeRef = tags["GPSLatitudeRef"];
+                        // var longitudeComponents = tags["GPSLongitude"];
+                        // var longitudeRef = tags["GPSLongitudeRef"];
 
-                        document.getElementById("gps-coordinates").append("<br>Test ");
-                        document.getElementById("gps-coordinates").append("<br> " + DateTimeDigitized); 
+                        // if (latitudeComponents) {
+                        //     console.log("GPSLatitude:");
+                        //     console.log(latitudeComponents);
+                        //     document.getElementById("gps-coordinates").append("GPSLatitude found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No GPSLatitude");
+                        //     document.getElementById("gps-coordinates").append("No GPSLatitude found");
+                        //     console.log("--------------");
+                        // }
+                        // if (latitudeRef) {
+                        //     console.log("GPSLatitudeRef:");
+                        //     console.log(latitudeRef);
+                        //     document.getElementById("gps-coordinates").append("GPSLatitudeRef found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No GPSLatitudeRef");
+                        //     document.getElementById("gps-coordinates").append("No GPSLatitudeRef found");
+                        //     console.log("--------------");
+                        // }
+
+                        // if (longitudeComponents) {
+                        //     console.log("GPSLongitude:");
+                        //     console.log(longitudeComponents);
+                        //     document.getElementById("gps-coordinates").append("GPSLongitude found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No GPSLongitude");
+                        //     document.getElementById("gps-coordinates").append("No GPSLongitude found");
+                        //     console.log("--------------");
+                        // }
+                        // if (longitudeRef) {
+                        //     console.log("GPSLongitudeRef:");
+                        //     console.log(longitudeRef);
+                        //     document.getElementById("gps-coordinates").append("GPSLongitudeRef found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No longitudeRef");
+                        //     document.getElementById("gps-coordinates").append("No GPSLongitudeRef found");
+                        //     console.log("--------------");
+                        // }
+
+                        // // Date Time
+                        // var pixelX = tags["PixelXDimension"];
+                        // var pixelY = tags["PixelYDimension"];
+
+                        // if (pixelX) {
+                        //     console.log("PixelXDimension:");
+                        //     console.log(pixelX);
+                        //     document.getElementById("gps-coordinates").append("PixelXDimension found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No pixelX");
+                        //     document.getElementById("gps-coordinates").append("No PixelXDimension found");
+                        //     console.log("--------------");
+                        // }
+                        // if (pixelY) {
+                        //     console.log("PixelYDimension:");
+                        //     console.log(pixelY);
+                        //     document.getElementById("gps-coordinates").append("PixelYDimension found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No pixelY");
+                        //     document.getElementById("gps-coordinates").append("No PixelYDimension found");
+                        //     console.log("--------------");
+                        // }
+
+                        // // Date Time
+                        // var dateTime = tags["dateTime"];
+                        // var dateTimeOriginal = tags["DateTimeOriginal"];
+                        // var DateTimeDigitized = tags["DateTimeDigitized"];
+
+                        // if (dateTime) {
+                        //     console.log("dateTime:");
+                        //     console.log(dateTime);
+                        //     document.getElementById("gps-coordinates").append("dateTime found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No dateTime");
+                        //     document.getElementById("gps-coordinates").append("No dateTime found");
+                        //     console.log("--------------");
+                        // }
+                        // if (dateTimeOriginal) {
+                        //     console.log("dateTimeOriginal:");
+                        //     console.log(dateTimeOriginal);
+                        //     document.getElementById("gps-coordinates").append("dateTimeOriginal found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No dateTimeOriginal");
+                        //     document.getElementById("gps-coordinates").append("No dateTimeOriginal found");
+                        //     console.log("--------------");
+                        // }
+                        // if (DateTimeDigitized) {
+                        //     console.log("DateTimeDigitized:");
+                        //     console.log(DateTimeDigitized);
+                        //     document.getElementById("gps-coordinates").append("DateTimeDigitized found");
+                        //     console.log("--------------");
+                        // }
+                        // else {
+                        //     console.log("No DateTimeDigitized");
+                        //     document.getElementById("gps-coordinates").append("No DateTimeDigitized found");
+                        //     console.log("--------------");
+                        // }
+
+                        // // Output
+
+                        // document.getElementById("gps-coordinates").append("The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + 
+                        // longitudeComponents + " " + longitudeRef + "" + 
+                        // "pixelX= " + pixelX + ", pixelY= " + pixelX + "" +
+                        // "DateTime= " + dateTime + ", dateTimeOriginal= " + dateTimeOriginal + ", DateTimeDigitized: " + DateTimeDigitized);
+
+                        // document.getElementById("gps-coordinates").append("Test ");
+                        // document.getElementById("gps-coordinates").append(" " + DateTimeDigitized); 
+                        // }
+                        // catch(e) {
+                        //     document.getElementById("gps-coordinates").append("Failed to Read Image File");
+                        // }
+
+                        // Loop through all objects
+
+
                     };
 
                     reader.readAsArrayBuffer(e.target.files[0]);
                 }
-            }
+            // }
         </script>
     </body>
 </html>
