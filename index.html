@@ -128,7 +128,11 @@
 
                         // Output
 
-                        document.getElementById("gps-coordinates").innerHTML = "The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + longitudeComponents + " " + longitudeRef + ".";
+                        document.getElementById("gps-coordinates").innerHTML = 
+                        "The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + 
+                        longitudeComponents + " " + longitudeRef + "<br>" + 
+                        "pixelX= " + pixelX + ", pixelY= " + pixelX + "<br>" +
+                        "DateTime= " + dateTime + ", dateTimeOriginal= " + dateTimeOriginal + ", DateTimeDigitized: " + DateTimeDigitized;
                     };
 
                     reader.readAsArrayBuffer(e.target.files[0]);
