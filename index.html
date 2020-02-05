@@ -31,19 +31,56 @@
                     {
                         console.log("In file reader");
 
-                        var tags = findEXIFinHEIC(reader.result);
-
                         $("html").append("<br>-----File Data: -----");
                         $("html").append("<br>File name = " + e.target.files[0].name);
                         $("html").append("<br>File type = " + e.target.files[0].type);
                         $("html").append("<br>-----Metadata: -----");
 
+                        var tags = findEXIFinHEIC(reader.result);
+
+                        var latitudeComponents = tags["GPSLatitude"];
+                        var latitudeRef = tags["GPSLatitudeRef"];
+                        var longitudeComponents = tags["GPSLongitude"];
+                        var longitudeRef = tags["GPSLongitudeRef"];
 
                         Object.keys(tags).forEach(function (item) {
                             console.log(item + ": " + tags[item]); // key: value
                             $("html").append("<br>" + item + ": " + tags[item]);
-                            console.log("----------");
                         })
+
+                        $("html").append("<br>----------");
+
+                        if (latitudeComponents) {
+                            $("html").append("<br>GPSLatitude found");
+                        }
+                        else {
+                            console.log("No GPSLatitude");
+                            $("html").append("<br>No GPSLatitude found");
+                        }
+                        if (latitudeRef) {
+                            $("html").append("<br>GPSLatitudeRef found");
+                        }
+                        else {
+                            console.log("No GPSLatitudeRef");
+                            $("html").append("<br>No GPSLatitudeRef found");
+                        }
+
+                        if (longitudeComponents) {
+                            $("html").append("<br>GPSLongitude found");
+                        }
+                        else {
+                            console.log("No GPSLongitude");
+                            $("html").append("<br>No GPSLongitude found");
+                        }
+                        if (longitudeRef) {
+                            $("html").append("<br>GPSLongitudeRef found");
+                        }
+                        else {
+                            console.log("No longitudeRef");
+                            $("html").append("<br>No GPSLongitudeRef found");
+                        }
+
+
                         // try {
 
                         //     // var debugFiles = evt.target.files
