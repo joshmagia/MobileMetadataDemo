@@ -1,46 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Image Rotation Test</title>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Exif-HEIC.js</title>
+    </head>
+    <body>
+        <div>
+            Upload an .heic file to extract its GPS coordiates.
+        </div>
+        <div>
+            <input type="file" id="photo" name="photo" acc accept=".heic" />
+        </div>
+        <div>
+            <span id="gps-coordinates"></span>
+        </div>
+        <script src="exif-heic.js"></script>
+        <script>
+            document.getElementById("photo").onchange = function (e)
+            {
+                if (e.target.files[0].name.toLowerCase().endsWith(".heic"))
+                {
+                    var reader = new FileReader();
 
-    <style>
-        .orientation {
-            image-orientation: from-image;
-        }
-    </style>
-</head>
-<body>
+                    reader.onload = function ()
+                    {
+                        var tags = findEXIFinHEIC(reader.result);
 
-    <div>
-        <p>Upload an Image: </p>
-    </div>
-    <br>
-    <input id="filesBrowse" type="file" accept="image/*" onchange="uploadedFile(event)">
-    <br>
-    <br>
-    <!--  -->
-    <button id="toggle" onclick="toggleCSS()">Toggle image-orientation CSS (front-end)</button>
-    <div>
-        <p>
-            Image Exif Rotation Field: 
-            <span id="output" style="font-weight: 900;"></span>
-        </p>
-    </div>
-    <br>
-    <div>
-        <p>Download Image After Upload: </p>
-        <a id="downloadLink" href="#" download>Download</a>
-    </div>
-    <br>
-    <img id="original" src="" alt="" style="width: 90%;">
+                        var latitudeComponents = tags["GPSLatitude"];
+                        var latitudeRef = tags["GPSLatitudeRef"];
+                        var longitudeComponents = tags["GPSLongitude"];
+                        var longitudeRef = tags["GPSLongitudeRef"];
 
+                        document.getElementById("gps-coordinates").innerHTML = "The picture was taken at " + latitudeComponents + " " + latitudeRef + ", " + longitudeComponents + " " + longitudeRef + ".";
+                    };
 
-    <!-- JS -->
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/piexif.js"></script>
-    <script src="app.js"></script>    
-</body>
+                    reader.readAsArrayBuffer(e.target.files[0]);
+                }
+            }
+        </script>
+    </body>
 </html>
